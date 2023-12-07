@@ -1,23 +1,41 @@
-import logo from './logo.svg';
 import './App.css';
+import 'react-toastify/dist/ReactToastify.css';
+import { BrowserRouter, Navigate, Route, Routes} from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import NavBar from './components/NavBar';
+import Home from './components/Home';
+import Register from './components/auth/Register';
+import NotFound from './components/NotFound';
+import LandingPage from './components/LandingPage';
+import Login from './components/auth/Login';
+import Pokedex from './components/content/Pokedex';
+import Team from './components/content/Team';
+import Map from './components/adventure/Map';
+import { useSelector } from 'react-redux';
 
 function App() {
+  const auth = useSelector((state) => state.auth);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <BrowserRouter>
+      <ToastContainer/>
+        <NavBar />
+        <Routes>
+          <Route path='/' element={ auth._id ? <Home /> : <LandingPage />} />
+          <Route path='/home' element={<Home />} />
+          {/* content Route */}
+          <Route path='/pokedex' element={<Pokedex />} />
+          <Route path='/team' element={<Team />} />
+          {/* auth Route */}
+          <Route path='/register' element={<Register />} />
+          <Route path='/login' element={<Login />} />
+          {/* not found Route */}
+          <Route path='/not-found' element={<NotFound />} />
+          <Route path='*' element={<Navigate to='/not-found'/>}/>
+          {/* Adventure */}
+          <Route path='adventure' element={<Map />}/>
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }

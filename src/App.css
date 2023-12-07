@@ -1,38 +1,395 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;400;700&display=swap');
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Nunito', sans-serif;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 .App {
+  background: url('https://wallpapercave.com/uwp/uwp4109082.png');
+  background-size: cover;
+  height: 100vh; /* Set height to viewport height */
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+
+/* NavBar section */
+.nav-bar{
+  height: 70px;
+  background-color:transparent;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+}
+
+.nav-bar a{
+  text-decoration: none;
+  color: white;
+}
+
+.nav-bar h2{
+  font-size: 32px;
+}
+
+.nav-bar .nav-bar-title{
+  display: flex;
+  flex-direction: row;
+}
+
+.nav-bar .nav-bar-title img{
+  width: 36px;
+  height: 36px;
+  max-width: 100%;
+  max-height: 100%;
+  margin-right: 0.5rem;
+}
+
+.nav-bar .dropdown-menu{
+  position: relative;
+  display: flex;
+  align-items: self-end;
+  flex-direction: column;
+}
+
+.nav-bar .dropdown-menu button{
+  border: none;
+  font-size: 20px;
+  font-weight: 400;
+  color: white;
+  background-color: transparent;
+}
+
+.nav-bar .dropdown-menu .menu{
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  z-index: 100;
+  background: rgba(168, 164, 164, 0.5);
+  border-radius: 10px;
+  width: 100px;
+  height: auto;
+  margin-top: 2rem;
   text-align: center;
+  padding: 0.5rem;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.nav-bar .dropdown-menu .menu .btnLogout{
+  border: none;
+  font-size: 16px;
+  font-weight: 400;
+  color: white;
+  background-color: transparent;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.nav-bar .dropdown-menu .menu a{
+  padding-top: 0.5rem;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* Not Found Section */
+.not-found{
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  color: rgb(255, 255, 255);
+  min-height: 80vh;
+}
+
+.not-found h2{
+  font-size: 56px;
+}
+
+.not-found p{
+  font-size: 28px;
+}
+
+/* Landing Page Section */
+.landing-page-container{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 4rem;
+}
+
+.landing-page-container .intro{
+  width: 600px;
+  margin-top: 1.5rem;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.landing-page-container img{
+  height: 600px;
+  width: auto;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.landing-page-container .intro h1{
+  font-size: 44px;
+  margin-bottom: 0.5rem;
+}
+
+.landing-page-container .intro h3{
+  font-size: 28px;
+  margin-top: 0.5rem;
+  margin-left: 2rem;
+  font-style: italic;
+}
+
+.landing-page-container .intro p{
+  font-size: 20px;
+  margin-top: 0.25rem;
+  margin-left: 1.5rem;
+}
+
+/* Home Page */
+.homepage-container{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 1rem 0;
+}
+
+.homepage-container h2{
+  font-size: 30px;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.battle-setting-container{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 4rem;
+}
+
+/* Team Selection Section */
+.battle-setting-container .team-selection{
+  width: 70%;
+  height: auto;
+  padding: 1rem;
+}
+
+.battle-setting-container .team-selection .team{
+  border: 1px solid red;
+  width: auto;
+  height: 32px;
+  align-items: center;
+  display: flex;
+}
+
+.battle-setting-container .team-selection .team span{
+  font-size: 16px;
+  font-weight: 600;
+  margin-right: 0.5rem;
+  color: white;
+}
+
+.battle-setting-container .team-selection .team select{
+  width: 100px;
+  border-radius: 10px;
+}
+
+/* Opponent Selection Section */
+.battle-setting-container .opponent-selection{
+  width: 30%;
+  height: auto;
+}
+
+.battle-setting-container .opponent-selection .opponent{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 3rem 2rem;
+  background-color: rgba(167, 170, 197, 0.5);
+  border-radius: 10px;
+  padding: 0.5rem;
+}
+
+.battle-setting-container .opponent-selection .opponent p{
+  text-align: center;
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.battle-setting-container .opponent-selection .opponent label{
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.battle-setting-container .opponent-selection .opponent select{
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.battle-setting-container .opponent-selection .opponent .battleBtn{
+  margin: 1rem 0;
+  border: none;
+  background: rgb(38, 7, 148);
+  color: white;
+  height: 40px;
+  font-weight: 400;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 20px;
+}
+
+.battle-setting-container .opponent-selection .opponent .adventureBtn{
+  margin-top: 4rem;
+  margin-bottom: 1rem;
+  border: none;
+  background: rgb(190, 6, 6);
+  color: white;
+  height: 40px;
+  font-weight: 400;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 20px;
+}
+
+/* Pokedex Section */
+.pokedex-container{
+  display: flex;
+  padding: 0.5rem 2rem;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+}
+
+.pokedex-container .titles{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.pokedex-container .titles button{
+  width: 50px;
+  height: auto;
+  border: none;
+  outline: none;
+  background: rgb(36, 36, 211);
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+}
+
+.pokedex-container .titles h2{
+  width: 93%;
+  text-align: center;
+  color: white;
+  font-size: 28px;
+}
+
+.pokedex-container .pokedex{
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  margin-top: 2rem;
+  padding: 0.5rem 0.5rem;
+  height: 525px;
+}
+
+.pokedex-container .pokedex .names{
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+  max-height: 100%;
+  overflow-y: auto;
+  margin-right: 0.25rem;
+}
+
+.pokedex-container .pokedex .names::-webkit-scrollbar {
+  width: 12px; /* Set scrollbar width */
+  background-color: transparent;
+}
+
+.pokedex-container .pokedex .names::-webkit-scrollbar-thumb {
+  background-color: rgb(168, 164, 164); /* Set color of the scrollbar thumb */
+  border-radius: 6px; /* Round the scrollbar thumb */
+}
+
+.pokedex-container .pokedex .names .pokemon{
+  cursor: pointer;
+  background: rgb(189, 189, 201);
+  border-radius: 10px;
+  margin: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.pokedex-container .pokedex .names .pokemon span{
+  font-weight: 500;
+  font-size: 20px;
+  margin-right: 1rem;
+}
+
+.pokedex-container .pokedex .details{
+  display: flex;
+  flex-direction: column;
+  width: 75%;
+  margin-left: 0.25rem;
+}
+
+.pokedex-container .pokedex .details .info{
+  display: flex;
+  flex-direction: row;
+  height: 70%;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+}
+
+.pokedex-container .pokedex .details .info .info-stats{
+  background: rgb(189, 189, 201);
+  border-radius: 10px;
+  width: 25%;
+  height: 100%;
+  max-height: 90%;
+  padding: 0.5rem;
+  margin-left: 1rem;
+}
+
+.pokedex-container .pokedex .details .info img{
+  width: auto;
+  height: 100%;
+}
+
+.pokedex-container .pokedex .details .info .learnset{
+  background: rgb(189, 189, 201);
+  border-radius: 10px;
+  width: 25%;
+  height: 100%;
+  max-height: 90%;
+  padding: 0.5rem;
+  margin-right: 1rem;
+}
+
+.pokedex-container .pokedex .details .info .learnset h2{
+  text-align: center;
+}
+
+.pokedex-container .pokedex .details .desc{
+  background: rgb(189, 189, 201);
+  border-radius: 10px;
+  margin: 0.5rem 1.5rem;
+  height: 27%;
+  padding: 0.5rem;
 }
