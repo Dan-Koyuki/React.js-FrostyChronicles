@@ -5,11 +5,15 @@ import { configureStore } from '@reduxjs/toolkit';
 import pokedexReducer, { pokemonsFetch } from './features/pokedexSlice';
 import { Provider } from 'react-redux';
 import authReducer, { loadUser } from './features/authSlice';
+import teamReducer from './features/teamSlice';
+import memberReducer from './features/memberSlice';
 
 const store = configureStore({
   reducer:{
     pokemons: pokedexReducer,
-    auth: authReducer
+    auth: authReducer,
+    team: teamReducer,
+    member: memberReducer
   }
 });
 
