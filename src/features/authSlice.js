@@ -18,7 +18,7 @@ export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async (values, {rejectWithValue}) => {
     try {
-      const token = await axios.post("https://frosty-backend.vercel.app/api/register", {
+      const token = await axios.post("https://frosty-backend-dan-koyukis-projects.vercel.app/api/register", {
         name: values.name,
         email: values.email,
         password: values.password
@@ -38,7 +38,7 @@ export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (values, {rejectWithValue}) => {
     try {
-      const token = await axios.post("https://frosty-backend.vercel.app/api/login", {
+      const token = await axios.post("https://frosty-backend-dan-koyukis-projects.vercel.app/api/login", {
         email: values.email,
         password: values.password
       });
