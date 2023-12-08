@@ -9,7 +9,7 @@ const initialState = {
 export const pokemonsFetch = createAsyncThunk(
   'pokemons/pokemonsFetch',
   async () => {
-    const response = await axios.get('http://localhost:5000/pokemons');
+    const response = await axios.get('https://frosty-backend.vercel.app/pokemons');
     console.log(response);
     return response?.data
   }

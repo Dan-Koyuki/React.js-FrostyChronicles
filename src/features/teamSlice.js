@@ -16,7 +16,7 @@ export const createTeam = createAsyncThunk(
   'utils/createTeam',
   async (values, {rejectWithValue}) => {
     try {
-      const team = await axios.post('http://localhost:5000/api/createteam', {
+      const team = await axios.post('https://frosty-backend.vercel.app/api/createteam', {
         name: values.name,
         userID: values.userID
       });
@@ -33,7 +33,7 @@ export const fetchTeam = createAsyncThunk(
   'utils/fetchTeam',
   async(values, {rejectWithValue}) => {
     try {
-      const team = await axios.post('http://localhost:5000/api/fetchteam', {
+      const team = await axios.post('https://frosty-backend.vercel.app/api/fetchteam', {
         userID: values.userID
       });
       return team.data;

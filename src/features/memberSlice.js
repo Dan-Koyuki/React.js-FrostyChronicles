@@ -34,7 +34,7 @@ export const addMember = createAsyncThunk(
   'utils/addMember',
   async (values) => {
     try {
-      const member = await axios.post('http://localhost:5000/api/addmember',{
+      const member = await axios.post('https://frosty-backend.vercel.app/api/addmember',{
         teamID : values.teamID,
         pokemonName : values.pokemonName,
         ability : values.ability,
@@ -68,7 +68,7 @@ export const fetchMember = createAsyncThunk(
   'utils/fetchMember',
   async(values, {rejectWithValue}) => {
     try {
-      const members = await axios.post('http://localhost:5000/api/fetchmember', {
+      const members = await axios.post('https://frosty-backend.vercel.app/api/fetchmember', {
         teamID : values.teamID,
       });
       return members.data;
