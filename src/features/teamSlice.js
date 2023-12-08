@@ -7,7 +7,7 @@ const initialState = {
   userID: '',
   creationStatus: '',
   creationError: '',
-  teams: [],
+  teams:  localStorage.getItem("team") ?  JSON.parse(localStorage.getItem("team")) : [],
   fetchingStatus: '',
   fetchingError:''
 };
@@ -54,6 +54,10 @@ const teamSlice = createSlice({
     });
     builder.addCase(createTeam.fulfilled, (state, action) => {
       if (action.payload){
+        const teamsFromLocalStorage = localStorage.getItem('team');
+        const teams = teamsFromLocalStorage ? JSON.parse(teamsFromLocalStorage) : [];
+        teams.push(action.payload);
+        localStorage.setItem('team', JSON.stringify(teams));
         return {
           _id: action.payload._id,
           name: action.payload.name,
@@ -70,6 +74,7 @@ const teamSlice = createSlice({
     builder.addCase(fetchTeam.fulfilled, (state, action) => {
       console.log(action.payload);
       if (action.payload){
+        localStorage.setItem('team', JSON.stringify(action.payload));
         return {
           ...state,
           fetchingStatus: 'success',

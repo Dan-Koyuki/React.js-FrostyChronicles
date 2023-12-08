@@ -25,7 +25,7 @@ const initialState = {
   moves4: '',
   creationStatus: '',
   creationError: '',
-  members: [],
+  members:  localStorage.getItem("members") ?  JSON.parse(localStorage.getItem("members")) : [],
   fetchingStatus: '',
   fetchingError:''
 };
@@ -88,7 +88,11 @@ const memberSlice = createSlice({
       return {...state, creationStatus: "pending"};
     });
     builder.addCase(addMember.fulfilled, (state, action) => {
-      if (action.payload){
+        if (action.payload){
+        const membersFromLocalStorage = localStorage.getItem('members');
+        const pokemon = membersFromLocalStorage ? JSON.parse(membersFromLocalStorage) : [];
+        pokemon.push(action.payload);
+        localStorage.setItem('team', JSON.stringify(pokemon));
         return {
           _id: action.payload._id,
           teamID : action.payload.teamID,
@@ -123,6 +127,7 @@ const memberSlice = createSlice({
     builder.addCase(fetchMember.fulfilled, (state, action) => {
       console.log(action.payload);
       if (action.payload){
+        localStorage.setItem('members', JSON.stringify(action.payload));
         return {
           ...state,
           fetchingStatus: 'success',

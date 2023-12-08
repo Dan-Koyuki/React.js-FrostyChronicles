@@ -77,6 +77,11 @@ const Team = () => {
     setNewMember(false);
   }
 
+  const handleSelect = (selected) => {
+    localStorage.removeItem('members');
+    setSelectedTeam(selected);
+  }
+
   return (
     <div className='team-container'>
       <div className='titles'>
@@ -87,7 +92,7 @@ const Team = () => {
         <div className='names'>
           {teams &&
             teams?.map((tim) => (
-              <div key={tim._id} onClick={() => setSelectedTeam(tim)}>
+              <div key={tim._id} onClick={() => handleSelect(tim)}>
                 {tim.name}
               </div>
             ))}
