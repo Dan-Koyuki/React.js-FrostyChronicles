@@ -26,6 +26,7 @@ const Team = () => {
 
   // Team's Member
   const [newMember, setNewMember] = useState(''); //this is toggle to display form to add new member to a team
+  // eslint-disable-next-line no-unused-vars
   const [member, setMember] = useState({
     teamID: '',
     pokemonName: '',
@@ -60,6 +61,7 @@ const Team = () => {
   const showCreateForm = () => {
     setNewTeam(true);
   }
+  // eslint-disable-next-line no-unused-vars
   const showMemberRec = () => {
     setNewMember(true);
   }
@@ -68,6 +70,7 @@ const Team = () => {
     dispatch(createTeam(team));
     setNewTeam(false);
   }
+  // eslint-disable-next-line no-unused-vars
   const handleMemberAddition = (e) => {
     e.preventDefault();
     dispatch(addMember(member));
