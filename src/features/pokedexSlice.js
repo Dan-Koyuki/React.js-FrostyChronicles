@@ -24,7 +24,7 @@ export const pokemonsFetch = createAsyncThunk(
 export const movesFetchS = createAsyncThunk(
   'pokemons/movesFetchS',
   async () => {
-    const response = await axios.get ('http://localhost:5000/moves');
+    const response = await axios.get ('https://frosty-backend-dan-koyukis-projects.vercel.app/moves');
     
     return response?.data;
   }
@@ -33,7 +33,7 @@ export const movesFetchS = createAsyncThunk(
 export const typesFetch = createAsyncThunk(
   'pokemons/typesFetch',
   async () => {
-    const response = await axios.get ('http://localhost:5000/types');
+    const response = await axios.get ('https://frosty-backend-dan-koyukis-projects.vercel.app//types');
     
     return response?.data;
   }
@@ -42,7 +42,7 @@ export const typesFetch = createAsyncThunk(
 export const staticTeamFetch = createAsyncThunk(
   'pokemons/staticTeamFetch',
   async () => {
-    const response = await axios.get ('http://localhost:5000/static-team');
+    const response = await axios.get ('https://frosty-backend-dan-koyukis-projects.vercel.app//static-team');
     
     return response?.data;
   }
