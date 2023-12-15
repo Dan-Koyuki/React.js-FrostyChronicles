@@ -12,6 +12,7 @@ import Pokedex from './components/content/Pokedex';
 import Team from './components/content/Team';
 import Map from './components/adventure/Map';
 import { useSelector } from 'react-redux';
+import Stage from './components/battle/Stage';
 
 function App() {
   const auth = useSelector((state) => state.auth);
@@ -33,7 +34,8 @@ function App() {
           <Route path='/not-found' element={<NotFound />} />
           <Route path='*' element={<Navigate to='/not-found'/>}/>
           {/* Adventure */}
-          <Route path='adventure' element={<Map />}/>
+          <Route path='/adventure' element={<Map />}/>
+          <Route path='/battle' element={<Stage />} />
         </Routes>
       </BrowserRouter>
     </div>

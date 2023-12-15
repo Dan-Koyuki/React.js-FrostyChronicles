@@ -1,22 +1,30 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { setBattlers } from '../features/battleSlice';
 
 const Home = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  const { staticTeam } = useSelector((state) => state.pokemons);
+
+  const [botSelected, setBotSelected] = useState();
+  const [userSelected, setUserSelected] = useState('');
 
   const handleAdventure = () => {
     navigate('/adventure');
   }
-  
-  const auth = useSelector((state) => state.auth);
-  console.log(auth);
 
-  const teams = [{
-    _id: 1
-  },{
-    _id: 2
-  }]
+  const handleBattle = () => {
+    console.log("user: ", userSelected);
+    console.log("bot: ", botSelected);
+    dispatch(setBattlers({bot: botSelected, player: userSelected}));
+    navigate('/battle');
+  }
+  
+  // const { teams } = useSelector((state) => state.team); // get Teams Collection
+
   return (
     <div className='homepage-container'>
       <>
@@ -25,29 +33,32 @@ const Home = () => {
         <div className='team-selection'>
           <div className='team'>
             <span>Team: </span>
-            <select>
-              <option value={'team'}>Team</option>
+            <select onChange={(e) => setUserSelected(e.target.value)}>
+              <option value=''>Select Team</option>
+              {staticTeam && staticTeam?.map((team) => (
+                <option key={team.TeamID} value={team.TeamID}>{team.TeamID}</option>
+              ))}
             </select>
+            <p>Currently, team created from Team menu cant be used</p>
           </div>
-          {teams && 
-            teams?.map((member) => (
-              <div key={member._id} className='members'>
-                {/* Team details here */}
-              </div>
-            ))}
+          <h1>Was reserved to display selected team</h1>
+          {}
         </div>
         <div className='opponent-selection'>
           <div className="opponent">
             <p>Choose Opponent</p>
             <label>Team:</label>
-            <select>
-              <option>TeamA</option>
+            <select onChange={(e) => setBotSelected(e.target.value)}>
+              <option value=''>Select Team</option>
+              {staticTeam && staticTeam?.map((team) => (
+                <option key={team.TeamID} value={team.TeamID}>{team.TeamID}</option>
+              ))}
             </select>
             <label>Difficulty:</label>
             <select>
               <option value="easy">Easy</option>
             </select>
-            <button className='battleBtn'>Battle!</button>
+            <button className='battleBtn' onClick={() => handleBattle()}>Battle!</button>
             <button className='adventureBtn' onClick={handleAdventure}>Adventure</button>
           </div>
         </div>

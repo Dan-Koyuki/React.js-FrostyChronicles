@@ -182,7 +182,6 @@ html, body {
 }
 
 .battle-setting-container .team-selection .team{
-  border: 1px solid red;
   width: auto;
   height: 32px;
   align-items: center;
@@ -194,6 +193,10 @@ html, body {
   font-weight: 600;
   margin-right: 0.5rem;
   color: white;
+}
+.battle-setting-container .team-selection .team p {
+  color: white;
+  margin-left: 5rem;
 }
 
 .battle-setting-container .team-selection .team select{
@@ -392,4 +395,233 @@ html, body {
   margin: 0.5rem 1.5rem;
   height: 27%;
   padding: 0.5rem;
+}
+
+/* Team Section */
+.team-container{
+  display: flex;
+  padding: 0.5rem 2rem;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+}
+
+.team-container .titles{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.team-container .titles button{
+  width: 60px;
+  height: 35px;
+  border: none;
+  outline: none;
+  background: rgb(36, 36, 211);
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+}
+
+.team-container .titles h2{
+  width: 100%;
+  text-align: center;
+  color: white;
+  font-size: 28px;
+  padding-left: 21%;
+}
+
+.team-container .team {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  margin-top: 2rem;
+  padding: 0.5rem 0.5rem;
+  height: 525px;
+}
+
+.team-container .team .names{
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+  max-height: 100%;
+  overflow-y: auto;
+  margin-right: 0.25rem;
+}
+
+.team-container .team .names::-webkit-scrollbar {
+  width: 12px; /* Set scrollbar width */
+  background-color: transparent;
+}
+
+.team-container .team .names::-webkit-scrollbar-thumb {
+  background-color: rgb(168, 164, 164); /* Set color of the scrollbar thumb */
+  border-radius: 6px; /* Round the scrollbar thumb */
+}
+
+.team-container .team .names .teamnames{
+  cursor: pointer;
+  background: rgb(189, 189, 201);
+  border-radius: 10px;
+  margin: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.AddTeam{
+  position: sticky;
+  bottom: 0;
+  margin-bottom: 0;
+}
+
+.AddTeam button{
+  width: 75px;
+  height: auto;
+  border: none;
+  outline: none;
+  padding: 0.2rem;
+  background: rgb(36, 36, 211);
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+}
+
+.team-container .team .details {
+  display: flex;
+  width: 75%;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  overflow-y: auto;
+}
+
+.team-container .team .details::-webkit-scrollbar {
+  width: 12px; /* Set scrollbar width */
+  background-color: transparent;
+}
+
+.team-container .team .details::-webkit-scrollbar-thumb {
+  background-color: rgb(168, 164, 164); /* Set color of the scrollbar thumb */
+  border-radius: 6px; /* Round the scrollbar thumb */
+}
+
+.team-container .team .details .pokemonCard{
+  width: 300px;
+  max-width: 100%;
+  height: 490px;
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem auto;
+  padding: 1rem;
+  box-shadow: -5px -5px 10px rgba(255, 255, 255, 0.5), 2px 2px 5px rgba(94, 104, 121, 0.3);
+  border-radius: 10px;
+  background: rgba(156, 174, 180, 0.5);
+}
+
+.team-container .team .details .addCard{
+  width: 300px;
+  max-width: 100%;
+  height: 490px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0.5rem auto;
+  padding: 1rem;
+  box-shadow: -5px -5px 10px rgba(255, 255, 255, 0.5), 2px 2px 5px rgba(94, 104, 121, 0.3);
+  border-radius: 10px;
+  align-items: center;
+  text-align: center;
+  font-size: 70px;
+}
+
+.team-container .team .details .pokemonCard p{
+  text-align: center;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.team-container .team .details .pokemonCard .ability,
+.team-container .team .details .pokemonCard .item {
+  display: flex;
+  flex-direction: row;
+  margin: 0.5rem;
+  color: white;
+}
+
+.team-container .team .details .pokemonCard .ability select{
+  width: 70%;
+  margin-left: 0.5rem;
+  border-radius: 10px;
+}
+
+.team-container .team .details .pokemonCard .item input{
+  width: 70%;
+  border-radius: 10px;
+  margin-left: 1rem;
+  padding: 0 0.2rem;
+}
+
+.team-container .team .details .pokemonCard .PokemonStat {
+  display: flex;
+  flex-direction: row;
+  width: 268px;
+  height: 200px;
+  justify-content: space-around;
+}
+
+.team-container .team .details .pokemonCard .PokemonStat .Iv,
+.team-container .team .details .pokemonCard .PokemonStat .Ev {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  color: white;
+  font-weight: 600;
+}
+
+.team-container .team .details .pokemonCard .PokemonStat .Iv p,
+.team-container .team .details .pokemonCard .PokemonStat .Ev p {
+  font-size: 14px;
+}
+
+.team-container .team .details .pokemonCard .PokemonStat .Iv .stat,
+.team-container .team .details .pokemonCard .PokemonStat .Ev .stat{
+  display: flex;
+  flex-direction: row;
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
+  margin-right: 0.1rem;
+  justify-content: space-around;
+}
+
+.team-container .team .details .pokemonCard .PokemonStat .Iv span,
+.team-container .team .details .pokemonCard .PokemonStat .Ev span {
+  font-size: 14px;
+  margin-right: 0.5rem;
+}
+
+.team-container .team .details .pokemonCard .PokemonStat .Iv input,
+.team-container .team .details .pokemonCard .PokemonStat .Ev input {
+  width: 50px;
+  height: 20px;
+}
+
+.team-container .team .details .pokemonCard .PokemonMoves{
+  display: flex;
+  flex-direction: column;
+  height: 125px;
+}
+
+.team-container .team .details .pokemonCard .PokemonMoves select{
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  margin-top: 0.45rem;
+}
+
+.team-container .team .details .pokemonCard button{
+  margin: 0.2;
+  border-radius: 10px;
+}
+
+.warning {
+  font-size: 12px;
+  color: red;
 }

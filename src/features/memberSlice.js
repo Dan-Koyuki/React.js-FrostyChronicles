@@ -27,34 +27,35 @@ const initialState = {
   creationError: '',
   members:  localStorage.getItem("members") ?  JSON.parse(localStorage.getItem("members")) : [],
   fetchingStatus: '',
-  fetchingError:''
+  fetchingError:'',
+  membertotal: ''
 };
 
-export const addMember = createAsyncThunk(
-  'utils/addMember',
+export const updateMember = createAsyncThunk(
+  'utils/updateMember',
   async (values) => {
     try {
-      const member = await axios.post('https://frosty-backend-dan-koyukis-projects.vercel.app/api/addmember',{
-        teamID : values.teamID,
-        pokemonName : values.pokemonName,
-        ability : values.ability,
-        item : values.item,
-        ivHP : values.ivHP,
-        ivATK : values.ivATK,
-        ivDEF : values.ivDEF,
-        ivSPA : values.ivSPA,
-        ivSPD : values.ivSPD,
-        ivSPE : values.ivSPE,
-        evHP : values.evHP,
-        evATK : values.evATK,
-        evDEF : values.evDEF,
-        evSPA : values.evSPA,
-        evSPD : values.evSPD,
-        evSPE : values.evSPE,
-        moves1 : values.moves1,
-        moves2 : values.moves2,
-        moves3 : values.moves3,
-        moves4 : values.moves4
+      const member = await axios.post('https://frosty-backend-dan-koyukis-projects.vercel.app/api/updateMember',{
+        teamID: values.teamID,
+        pokemonName: values.pokemonName,
+        ability: values.ability || 'null',
+        item: values.item || 'null',
+        ivHP: values.ivHP || 0,
+        ivATK: values.ivATK || 0,
+        ivDEF: values.ivDEF || 0,
+        ivSPA: values.ivSPA || 0,
+        ivSPD: values.ivSPD || 0,
+        ivSPE: values.ivSPE || 0,
+        evHP: values.evHP || 0,
+        evATK: values.evATK || 0,
+        evDEF: values.evDEF || 0,
+        evSPA: values.evSPA || 0,
+        evSPD: values.evSPD || 0,
+        evSPE: values.evSPE || 0,
+        moves1: values.moves1 || 'null', // Set moves1 to empty string if it's falsy
+        moves2: values.moves2 || 'null',
+        moves3: values.moves3 || 'null',
+        moves4: values.moves4 || 'null'
       });
 
       return member.data;
@@ -63,6 +64,22 @@ export const addMember = createAsyncThunk(
     }
   }
 );
+
+export const addMember =createAsyncThunk(
+  'utils/addMember',
+  async(values) => {
+    try {
+      const member = await axios.post('https://frosty-backend-dan-koyukis-projects.vercel.app/api/addMember', {
+        teamID : values.teamID,
+        pokemonName : values.pokemonName
+      });
+
+      return member.data;
+    } catch (error) {
+      console.log(error.response.data);
+    }
+  }
+)
 
 export const fetchMember = createAsyncThunk(
   'utils/fetchMember',
@@ -82,43 +99,39 @@ export const fetchMember = createAsyncThunk(
 const memberSlice = createSlice({
   name: 'utils',
   initialState,
-  reducers: {},
+  reducers: {
+    getTotals(state, action){
+      state.membertotal = state.members?.length || 0;
+    }
+  },
   extraReducers: (builder) => {
-    builder.addCase(addMember.pending, (state, action) => {
+    builder.addCase(updateMember.pending, (state, action) => {
       return {...state, creationStatus: "pending"};
     });
-    builder.addCase(addMember.fulfilled, (state, action) => {
-        if (action.payload){
-        const membersFromLocalStorage = localStorage.getItem('members');
-        const pokemon = membersFromLocalStorage ? JSON.parse(membersFromLocalStorage) : [];
-        pokemon.push(action.payload);
-        localStorage.setItem('team', JSON.stringify(pokemon));
-        return {
-          _id: action.payload._id,
-          teamID : action.payload.teamID,
-          pokemonName : action.payload.pokemonName,
-          ability : action.payload.ability,
-          item : action.payload.item,
-          ivHP : action.payload.ivHP,
-          ivATK : action.payload.ivATK,
-          ivDEF : action.payload.ivDEF,
-          ivSPA : action.payload.ivSPA,
-          ivSPD : action.payload.ivSPD,
-          ivSPE : action.payload.ivSPE,
-          evHP : action.payload.evHP,
-          evATK : action.payload.evATK,
-          evDEF : action.payload.evDEF,
-          evSPA : action.payload.evSPA,
-          evSPD : action.payload.evSPD,
-          evSPE : action.payload.evSPE,
-          moves1 : action.payload.moves1,
-          moves2 : action.payload.moves2,
-          moves3 : action.payload.moves3,
-          moves4 : action.payload.moves4
+    builder.addCase(updateMember.fulfilled, (state, action) => {
+      if (action.payload) {
+        const updatedMember = action.payload;
+    
+        // Find the index of the updated member in the members array
+        const memberIndex = state.members.findIndex(
+          member => member._id === updatedMember._id
+        );
+    
+        if (memberIndex !== -1) {
+          // Create a new array with the updated member
+          const updatedMembers = [...state.members];
+          updatedMembers[memberIndex] = updatedMember;
+    
+          return {
+            ...state,
+            members: updatedMembers
+          };
         }
-      } else return state;
-    });
-    builder.addCase(addMember.rejected, (state, action) => {
+      }
+    
+      return state;
+    });    
+    builder.addCase(updateMember.rejected, (state, action) => {
       return { ...state, creationStatus: "rejected", creationError: action.payload };
     });
     builder.addCase(fetchMember.pending, (state, action) => {
@@ -126,6 +139,10 @@ const memberSlice = createSlice({
     });
     builder.addCase(fetchMember.fulfilled, (state, action) => {
       console.log(action.payload);
+      const membersFromLocalStorage = localStorage.getItem('members');
+      const pokemon = membersFromLocalStorage ? JSON.parse(membersFromLocalStorage) : [];
+      pokemon.push(action.payload);
+      localStorage.setItem('team', JSON.stringify(pokemon));
       if (action.payload){
         localStorage.setItem('members', JSON.stringify(action.payload));
         return {
@@ -140,5 +157,7 @@ const memberSlice = createSlice({
     });
   }
 });
+
+export const { getTotals } = memberSlice.actions;
 
 export default memberSlice.reducer;
