@@ -7,7 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import PlayerDetail from './StageComponent/PlayerDetail';
 import BotDetail from './StageComponent/BotDetail';
 import { DamageCalculation, playerFight, playerSwitch } from './Utility/PlayerMethod';
-import { BotAction, botDecision, botSwitch, botSwitchAction } from './Utility/BotMethod';
+import { BotAction, botDecision, botDecision, botSwitch, botSwitchAction } from './Utility/BotMethod';
+import pokemon from '../../../../backend/models/Pokemon';
 
 const Stage = () => {
 
@@ -30,6 +31,7 @@ const Stage = () => {
   const [playerCurrent, setPlayerCurrent] = useState(null);
   const [botCurrent, setBotCurrent] = useState(null);
   const [playerFaintSwitch, setFaintSwitch] = useState(false);
+  const [playerSwitchIn, setPlayerSwitchIn] = useState(null);
 
   const opponent = new Bot({
     vBotTeam: botTeam,
@@ -169,12 +171,76 @@ const Stage = () => {
         console.log("Bot Switch here");
         // BOT ACTION
         const temp = await BotAction(botDecisionState, botCurrent, playerCurrent, botBattleTeam);
+        setBotCurrent(temp.botUpdate);
         console.log("Why bot here: ", temp);
   
         // PLAYER ACTION
         await handlePlayerAction(selectedMove);
       }
       setActionComplate(true);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleSwitching = async (pokemonIndex) => {
+    try {
+      setStartAction(true);
+      const SwitchIn = playerBattleTeam[pokemonIndex];
+      setPlayerSwitchIn(SwitchIn);
+      const botDecisionState = await botDecision(botCurrent, playerCurrent, botBattleTeam);
+      if (botDecisionState.actionToken === 0){
+        setPlayerCurrent(playerSwitchIn);
+
+        const temp = await BotAction(botDecisionState, botCurrent, playerCurrent, botBattleTeam);
+        setPlayerCurrent(temp.playerUpdate);
+      } else if (botDecisionState.actionToken === 1){
+        if (playerCurrent.tSPE > botCurrent.tSPE){
+          console.log("Player Faster");
+          // PLAYER ACTION
+          setPlayerCurrent(playerSwitchIn);
+  
+          // BOT ACTION
+          const temp = await BotAction(botDecisionState, botCurrent, playerCurrent, botBattleTeam);
+          setBotCurrent(temp.botUpdate);
+        } else if (playerCurrent.tSPE < botCurrent.tSPE){
+          console.log("Bot Faster");
+          // BOT ACTION
+          const temp = await BotAction(botDecisionState, botCurrent, playerCurrent, botBattleTeam);
+          setBotCurrent(temp.botUpdate);
+  
+          // PLAYER ACTION
+          setPlayerCurrent(playerSwitchIn);
+        } else {
+          const chance = Math.random() < 0.5;
+          if (chance) {
+            // PLAYER ACTION
+            setPlayerCurrent(playerSwitchIn);
+    
+            // BOT ACTION
+            const temp = await BotAction(botDecisionState, botCurrent, playerCurrent, botBattleTeam);
+            setBotCurrent(temp.botUpdate);
+          } else {
+            // BOT ACTION
+            const temp = await BotAction(botDecisionState, botCurrent, playerCurrent, botBattleTeam);
+            setBotCurrent(temp.botUpdate);
+    
+            // PLAYER ACTION
+            setPlayerCurrent(playerSwitchIn);
+          }
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleFaintSwitching = async (pokemonIndex) => {
+    try {
+      setStartAction(true);
+      const SwitchIn = playerBattleTeam[pokemonIndex];
+      setPlayerSwitchIn(SwitchIn);
+      setPlayerCurrent(playerSwitchIn);
     } catch (error) {
       console.log(error);
     }
@@ -215,7 +281,15 @@ const Stage = () => {
             </MoveButtonContainer>
             <PokemonButtonContainer>
             {playerBattleTeam?.map((pokemon,index) => (
-              <PokemonSwitch key={index}>{pokemon.name}</PokemonSwitch>
+              <PokemonSwitch key={index} onClick={() => handleSwitching(index)}>{pokemon.name}</PokemonSwitch>
+            ))}
+            </PokemonButtonContainer>
+          </Choice>
+        ) : playerFaintSwitch ? (
+          <Choice>
+            <PokemonButtonContainer>
+            {playerBattleTeam?.map((pokemon,index) => (
+              <PokemonSwitch key={index} onClick={() => handleFaintSwitching(index)}>{pokemon.name}</PokemonSwitch>
             ))}
             </PokemonButtonContainer>
           </Choice>

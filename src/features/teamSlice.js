@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios';
+import { uri } from './api';
 
 const initialState = {
   _id: '',
@@ -16,7 +17,7 @@ export const createTeam = createAsyncThunk(
   'utils/createTeam',
   async (values, {rejectWithValue}) => {
     try {
-      const team = await axios.post('https://frosty-backend-dan-koyukis-projects.vercel.app/api/createteam', {
+      const team = await axios.post(`${uri}/api/createteam`, {
         name: values.name,
         userID: values.userID
       });
@@ -33,7 +34,7 @@ export const fetchTeam = createAsyncThunk(
   'utils/fetchTeam',
   async(values, {rejectWithValue}) => {
     try {
-      const team = await axios.post('https://frosty-backend-dan-koyukis-projects.vercel.app/api/fetchteam', {
+      const team = await axios.post(`${uri}/api/fetchteam`, {
         userID: values.userID
       });
       return team.data;

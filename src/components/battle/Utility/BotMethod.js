@@ -80,7 +80,7 @@ export const botDecision = async (botCurrentPokemon, playerCurrentPokemon, botTe
     let advantagePoint = 0;
     playerCurrentPokemon.types.forEach((type) => {
       botCurrentPokemon.types.forEach((botType) => {
-        if (botType.effect.double.includes(type.TypeID)){
+        if (botType.effect.double.includes(type.TypeID) || botType.effect.neutral.includes(type.TypeID)){
           advantagePoint += 1;
         }
       })
@@ -206,7 +206,7 @@ const botDamageCalculation = async (botMove, playerCurrentPokemon, botCurrentPok
 export const BotAction = async (botDecisionState, botCurrentPokemon, playerCurrentPokemon, botTeam) => {
   const State ={
     botWin: true,
-    playerUpdate: {},
+    playerUpdate: null,
     botUpdate: null
   }
 

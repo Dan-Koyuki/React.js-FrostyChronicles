@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios';
+import { uri } from './api';
 
 const initialState = {
   pokemons: [],
@@ -15,7 +16,7 @@ const initialState = {
 export const pokemonsFetch = createAsyncThunk(
   'pokemons/pokemonsFetch',
   async () => {
-    const response = await axios.get('https://frosty-backend-dan-koyukis-projects.vercel.app/pokemons');
+    const response = await axios.get(`${uri}/pokemons`);
     
     return response?.data;
   }
@@ -24,7 +25,7 @@ export const pokemonsFetch = createAsyncThunk(
 export const movesFetchS = createAsyncThunk(
   'pokemons/movesFetchS',
   async () => {
-    const response = await axios.get ('https://frosty-backend-dan-koyukis-projects.vercel.app/moves');
+    const response = await axios.get (`${uri}/moves`);
     
     return response?.data;
   }
@@ -33,7 +34,7 @@ export const movesFetchS = createAsyncThunk(
 export const typesFetch = createAsyncThunk(
   'pokemons/typesFetch',
   async () => {
-    const response = await axios.get ('https://frosty-backend-dan-koyukis-projects.vercel.app//types');
+    const response = await axios.get (`${uri}/types`);
     
     return response?.data;
   }
@@ -42,7 +43,7 @@ export const typesFetch = createAsyncThunk(
 export const staticTeamFetch = createAsyncThunk(
   'pokemons/staticTeamFetch',
   async () => {
-    const response = await axios.get ('https://frosty-backend-dan-koyukis-projects.vercel.app//static-team');
+    const response = await axios.get (`${uri}/static-team`);
     
     return response?.data;
   }
