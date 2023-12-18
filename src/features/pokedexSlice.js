@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios';
-import { uri } from './api';
+import { uri, uri2 } from './api';
 
 const initialState = {
   pokemons: [],
@@ -25,7 +25,7 @@ export const pokemonsFetch = createAsyncThunk(
 export const movesFetchS = createAsyncThunk(
   'pokemons/movesFetchS',
   async () => {
-    const response = await axios.get (`${uri}/moves`);
+    const response = await axios.get (`${uri2}/moves`);
     
     return response?.data;
   }
@@ -34,7 +34,7 @@ export const movesFetchS = createAsyncThunk(
 export const typesFetch = createAsyncThunk(
   'pokemons/typesFetch',
   async () => {
-    const response = await axios.get (`${uri}/types`);
+    const response = await axios.get (`${uri2}/types`);
     
     return response?.data;
   }
@@ -43,7 +43,7 @@ export const typesFetch = createAsyncThunk(
 export const staticTeamFetch = createAsyncThunk(
   'pokemons/staticTeamFetch',
   async () => {
-    const response = await axios.get (`${uri}/static-team`);
+    const response = await axios.get (`${uri2}/static-team`);
     
     return response?.data;
   }
