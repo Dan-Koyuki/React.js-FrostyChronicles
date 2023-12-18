@@ -7,8 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import PlayerDetail from './StageComponent/PlayerDetail';
 import BotDetail from './StageComponent/BotDetail';
 import { DamageCalculation, playerFight, playerSwitch } from './Utility/PlayerMethod';
-import { BotAction, botDecision, botDecision, botSwitch, botSwitchAction } from './Utility/BotMethod';
-import pokemon from '../../../../backend/models/Pokemon';
+import { BotAction, botDecision, botSwitch, botSwitchAction } from './Utility/BotMethod';
 
 const Stage = () => {
 
