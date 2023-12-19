@@ -2,6 +2,17 @@ import React from 'react';
 import styled from 'styled-components';
 
 const PlayerDetail = ({playerCurrent}) => {
+
+  if (!playerCurrent) {
+    return (
+      <PlayerSide>
+        <div>
+          <h1>Loading...</h1>
+        </div>
+      </PlayerSide>
+    );
+  }
+
   return ( 
     <PlayerSide>
       <div>

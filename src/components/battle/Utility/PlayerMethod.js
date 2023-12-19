@@ -43,8 +43,9 @@ export const playerFight = async (playerCurrentPokemon, playerTeam) => {
 
 export const DamageCalculation = async (playerMove, botCurrentPokemon, playerCurrentPokemon) => {
   const State = {
-    botUpdate: {}
+    botUpdate: botCurrentPokemon
   }
+  
   try {
     let tBotDamageCount;
     if (playerMove.category === 'Special'){
@@ -77,22 +78,14 @@ export const DamageCalculation = async (playerMove, botCurrentPokemon, playerCur
     }
 
     if (botCurrentPokemon.rHP <= tBotDamageCount){
-      const botPokemon = {
-        ...botCurrentPokemon,
-        rHP: 0
-      }
-      State.botUpdate = botPokemon;
+      State.botUpdate.rHP = 0
     } else {
-      const remaningHP = botCurrentPokemon.rHP
-      const botPokemon = {
-        ...botCurrentPokemon,
-        rHP: remaningHP - tBotDamageCount
-      }
-      State.botUpdate = botPokemon;
+      State.botUpdate.rHP = State.botUpdate.rHP - tBotDamageCount
     }
-
-    return State;
   } catch (error) {
     console.log(error);
   }
+
+  return State;
+
 }

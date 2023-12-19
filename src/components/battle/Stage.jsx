@@ -50,7 +50,6 @@ const Stage = () => {
 
   useEffect(() => { // ensure only executed once
     if (player.vPlayerBattleTeam.length === 0) {
-      console.log("Executed");
       opponent.init();
       player.init();
       setPlayerBattleTeam(player.vPlayerBattleTeam);
@@ -124,6 +123,7 @@ const Stage = () => {
       const selectedMove = playerCurrent.moves[moveIndex];
       console.log("selectedMove is ", selectedMove);
       const botDecisionState = await botDecision(botCurrent, playerCurrent, botBattleTeam);
+      console.log("Bot State:", botDecisionState);
       if (botDecisionState.actionToken === 0){
         console.log("BoT Didnt Switch");
         if (playerCurrent.tSPE > botCurrent.tSPE){
@@ -188,47 +188,15 @@ const Stage = () => {
       const SwitchIn = playerBattleTeam[pokemonIndex];
       setPlayerSwitchIn(SwitchIn);
       const botDecisionState = await botDecision(botCurrent, playerCurrent, botBattleTeam);
-      if (botDecisionState.actionToken === 0){
-        setPlayerCurrent(playerSwitchIn);
 
-        const temp = await BotAction(botDecisionState, botCurrent, playerCurrent, botBattleTeam);
-        setPlayerCurrent(temp.playerUpdate);
-      } else if (botDecisionState.actionToken === 1){
-        if (playerCurrent.tSPE > botCurrent.tSPE){
-          console.log("Player Faster");
-          // PLAYER ACTION
-          setPlayerCurrent(playerSwitchIn);
-  
-          // BOT ACTION
-          const temp = await BotAction(botDecisionState, botCurrent, playerCurrent, botBattleTeam);
-          setBotCurrent(temp.botUpdate);
-        } else if (playerCurrent.tSPE < botCurrent.tSPE){
-          console.log("Bot Faster");
-          // BOT ACTION
-          const temp = await BotAction(botDecisionState, botCurrent, playerCurrent, botBattleTeam);
-          setBotCurrent(temp.botUpdate);
-  
-          // PLAYER ACTION
-          setPlayerCurrent(playerSwitchIn);
-        } else {
-          const chance = Math.random() < 0.5;
-          if (chance) {
-            // PLAYER ACTION
-            setPlayerCurrent(playerSwitchIn);
-    
-            // BOT ACTION
-            const temp = await BotAction(botDecisionState, botCurrent, playerCurrent, botBattleTeam);
-            setBotCurrent(temp.botUpdate);
-          } else {
-            // BOT ACTION
-            const temp = await BotAction(botDecisionState, botCurrent, playerCurrent, botBattleTeam);
-            setBotCurrent(temp.botUpdate);
-    
-            // PLAYER ACTION
-            setPlayerCurrent(playerSwitchIn);
-          }
-        }
-      }
+      // Player Action
+      setPlayerCurrent(playerSwitchIn);
+
+      // Bot Action,  either switch or give damage
+      const temp = await BotAction(botDecisionState, botCurrent, playerCurrent, botBattleTeam);
+      setBotCurrent(temp.botUpdate);
+      setPlayerCurrent(temp.playerUpdate);
+      
     } catch (error) {
       console.log(error);
     }

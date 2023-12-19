@@ -2,12 +2,6 @@ class Bot {
   constructor(config){
     this.vBotTeam = null;
     this.vBotReference = config.vBotTeam;
-    this.vBotCurrent = null;
-    this.vBotCMoves = null;
-    this.vBotCSwitch = null;
-    this.vBotActionToken = 0;
-    this.vBotWin = true;
-    this.vBotIsFainted = 0;
     this.vBotBattleTeam = [];
     this.pokedex = config.pokedex;
     this.moves = config.moves;
@@ -77,8 +71,8 @@ class Bot {
         }
       })
     });
-
   }
+
 }
 
 export default Bot;

@@ -49,15 +49,15 @@ export const botSwitch = async (playerPokemon, botTeam) => {
         State.status = false;
       }
     }
-    return State;
   } catch (error) {
     console.log(error);
   }
+
+  return State;
+
 };
 
 export const botSwitchAction = async (switchInPokemon, updatedPokemon) =>{
-  console.log("Bot here?", switchInPokemon);
-  console.log('Its still here?', updatedPokemon);
   try {
     if (updatedPokemon !== switchInPokemon || updatedPokemon === null){
       console.log("this?");
@@ -97,11 +97,12 @@ export const botDecision = async (botCurrentPokemon, playerCurrentPokemon, botTe
       State.SwitchInPokemon = SwitchState.botSwitchIn;
       console.log("bot Switching");
     }
-
-    return State;
   } catch (error) {
     console.log(error);
   }
+
+  return State;
+
 }
 
 const botMove = async (botCurrentPokemon, playerCurrentPokemon) => {
@@ -138,16 +139,15 @@ const botMove = async (botCurrentPokemon, playerCurrentPokemon) => {
       State.actionToken = 0;
     }
     console.log("Bot Choose: ",State.moveSelected);
-    return State;
   } catch (error) {
     console.log(error);
   }
-
+  return State;
 }
 
 const botDamageCalculation = async (botMove, playerCurrentPokemon, botCurrentPokemon) => {
   const State = {
-    playerPokemon: {}
+    playerPokemon: playerCurrentPokemon
   }
 
   try {
@@ -181,19 +181,13 @@ const botDamageCalculation = async (botMove, playerCurrentPokemon, botCurrentPok
       tBotDamageCount *= 0;
     }
 
+    tBotDamageCount = Number.parseInt(tBotDamageCount, 10);
+    console.log("remaining HP player: ", playerCurrentPokemon.rHP);
+    console.log("Damage HP player: ", tBotDamageCount);
     if (playerCurrentPokemon.rHP <= tBotDamageCount){
-      const playerPokemon = {
-        ...playerCurrentPokemon,
-        rHP: 0
-      }
-      State.playerPokemon = playerPokemon;
+      State.playerPokemon.rHP = 0;
     } else {
-      const remaningHP = playerCurrentPokemon.rHP;
-      const playerPokemon = {
-        ...playerCurrentPokemon,
-        rHP: remaningHP - tBotDamageCount
-      }
-      State.playerPokemon = playerPokemon;
+      State.playerPokemon.rHP = State.playerPokemon.rHP - tBotDamageCount
     }
   } catch (error) {
     console.log(error);
@@ -206,17 +200,17 @@ const botDamageCalculation = async (botMove, playerCurrentPokemon, botCurrentPok
 export const BotAction = async (botDecisionState, botCurrentPokemon, playerCurrentPokemon, botTeam) => {
   const State ={
     botWin: true,
-    playerUpdate: null,
-    botUpdate: null
+    playerUpdate: playerCurrentPokemon,
+    botUpdate: botCurrentPokemon
   }
 
   if (botCurrentPokemon.rHP !== 0){
     console.log("bot is here right now and action token is: ", botDecisionState.actionToken);
-    if (botDecisionState.actionToken === 1){
+    if (botDecisionState.actionToken === 1){ // Bot Switch
       console.log("botSwitch in is:", botDecisionState.SwitchInPokemon);
       State.botUpdate = await botSwitchAction(botDecisionState.SwitchInPokemon, botCurrentPokemon);
       console.log("State.botUpdate: ", State.botUpdate);
-    } else if (botDecisionState.actionToken === 0){
+    } else if (botDecisionState.actionToken === 0){ // Giving Damage
       const DamageResult = await botDamageCalculation(botDecisionState.SelectedMove, playerCurrentPokemon, botCurrentPokemon);
       State.playerUpdate = DamageResult.playerPokemon;
     }

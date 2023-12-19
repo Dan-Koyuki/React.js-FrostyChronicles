@@ -1,6 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 const BotDetail = ({botCurrent}) => {
+
+  if (!botCurrent) {
+    return (
+      <BotSide>
+        <div>
+          <h1>Loading...</h1>
+        </div>
+      </BotSide>
+    );
+  }
+
   return ( 
     <BotSide>
       <div>
