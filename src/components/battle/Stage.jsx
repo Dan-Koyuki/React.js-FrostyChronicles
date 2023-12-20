@@ -60,8 +60,6 @@ const Stage = () => {
   useEffect(() => {
     if (actionComplete){
       checkEndGame();
-      console.log("Player Pokemon:",playerCurrent);
-      console.log("Bot pokemon: ", botCurrent);
       setStartAction(false);
       setActionComplate(false);
     }
@@ -112,6 +110,7 @@ const Stage = () => {
       setBotCurrent(playerResult.botUpdate);
     } else if (playerAction.nextState === "Switch"){
       setFaintSwitch(true);
+      setPlayerCurrent(null);
     } else if (playerAction.nextState === "Lose"){
       setPlayerWin(false);
     }
@@ -121,13 +120,9 @@ const Stage = () => {
     try {
       setStartAction(true);
       const selectedMove = playerCurrent.moves[moveIndex];
-      console.log("selectedMove is ", selectedMove);
       const botDecisionState = await botDecision(botCurrent, playerCurrent, botBattleTeam);
-      console.log("Bot State:", botDecisionState);
       if (botDecisionState.actionToken === 0){
-        console.log("BoT Didnt Switch");
         if (playerCurrent.tSPE > botCurrent.tSPE){
-          console.log("Player Faster");
           // PLAYER ACTION
           await handlePlayerAction(selectedMove);
   
@@ -138,7 +133,6 @@ const Stage = () => {
             setBotWin(botResult.botWin)
           }
         } else if (playerCurrent.tSPE < botCurrent.tSPE){
-          console.log("Bot Faster");
           // BOT ACTION
           const botResult = await BotAction(botDecisionState, botCurrent, playerCurrent, botBattleTeam);
           setPlayerCurrent(botResult.playerUpdate);
@@ -167,11 +161,9 @@ const Stage = () => {
           }
         }
       } else if (botDecisionState.actionToken === 1){ // Switching will always go first
-        console.log("Bot Switch here");
         // BOT ACTION
         const temp = await BotAction(botDecisionState, botCurrent, playerCurrent, botBattleTeam);
         setBotCurrent(temp.botUpdate);
-        console.log("Why bot here: ", temp);
   
         // PLAYER ACTION
         await handlePlayerAction(selectedMove);
@@ -188,9 +180,12 @@ const Stage = () => {
       const SwitchIn = playerBattleTeam[pokemonIndex];
       setPlayerSwitchIn(SwitchIn);
       const botDecisionState = await botDecision(botCurrent, playerCurrent, botBattleTeam);
+      console.log("bot decision:", botDecisionState);
 
+      console.log("player switch in to:", playerSwitchIn);
       // Player Action
       setPlayerCurrent(playerSwitchIn);
+      console.log('player current after switch',playerCurrent)
 
       // Bot Action,  either switch or give damage
       const temp = await BotAction(botDecisionState, botCurrent, playerCurrent, botBattleTeam);
@@ -200,17 +195,19 @@ const Stage = () => {
     } catch (error) {
       console.log(error);
     }
+    setActionComplate(true);
   }
 
   const handleFaintSwitching = async (pokemonIndex) => {
     try {
-      setStartAction(true);
       const SwitchIn = playerBattleTeam[pokemonIndex];
       setPlayerSwitchIn(SwitchIn);
       setPlayerCurrent(playerSwitchIn);
+      setFaintSwitch(false);
     } catch (error) {
       console.log(error);
     }
+    setActionComplate(true);
   }
 
   const handleBack = () => {
@@ -239,7 +236,7 @@ const Stage = () => {
           )
         }
       </BattleStyled>
-      { turnCount !== 0 && !startAction ? (
+      { turnCount !== 0 && !startAction && playerCurrent ? (
           <Choice>
             <MoveButtonContainer>
             {playerCurrent.moves?.map((move, index) => (
@@ -255,8 +252,15 @@ const Stage = () => {
         ) : playerFaintSwitch ? (
           <Choice>
             <PokemonButtonContainer>
-            {playerBattleTeam?.map((pokemon,index) => (
-              <PokemonSwitch key={index} onClick={() => handleFaintSwitching(index)}>{pokemon.name}</PokemonSwitch>
+            {playerBattleTeam?.map((pokemon, index) => (
+              <PokemonSwitch
+                key={index}
+                onClick={() => handleFaintSwitching(index)}
+                disabled={pokemon.rHP === 0}
+                style={{ pointerEvents: pokemon.rHP === 0 ? 'none' : 'auto' }}
+              >
+                {pokemon.name}
+              </PokemonSwitch>
             ))}
             </PokemonButtonContainer>
           </Choice>

@@ -60,7 +60,6 @@ export const botSwitch = async (playerPokemon, botTeam) => {
 export const botSwitchAction = async (switchInPokemon, updatedPokemon) =>{
   try {
     if (updatedPokemon !== switchInPokemon || updatedPokemon === null){
-      console.log("this?");
       updatedPokemon = switchInPokemon
 
       return updatedPokemon;
@@ -85,17 +84,14 @@ export const botDecision = async (botCurrentPokemon, playerCurrentPokemon, botTe
         }
       })
     })
-    console.log(advantagePoint);
     if (advantagePoint > 0){
       const MoveState = await botMove(botCurrentPokemon, playerCurrentPokemon);
       State.actionToken = MoveState.actionToken;
       State.SelectedMove = MoveState.moveSelected;
-      console.log("bot choose a move");
     } else if (advantagePoint === 0){
       const SwitchState = await botSwitch(playerCurrentPokemon, botTeam);
       State.actionToken = SwitchState.actionToken;
       State.SwitchInPokemon = SwitchState.botSwitchIn;
-      console.log("bot Switching");
     }
   } catch (error) {
     console.log(error);
@@ -107,7 +103,7 @@ export const botDecision = async (botCurrentPokemon, playerCurrentPokemon, botTe
 
 const botMove = async (botCurrentPokemon, playerCurrentPokemon) => {
   const State = {
-    moveSelected: {},
+    moveSelected: null,
     status: true,
     actionToken: 1
   }
@@ -133,12 +129,11 @@ const botMove = async (botCurrentPokemon, playerCurrentPokemon) => {
 
     })
 
-    if (this.vBotCMoves === null) {
+    if (State.moveSelected === null) {
       const index = Math.floor(Math.random() * 6) + 1;
       State.moveSelected = botCurrentPokemon.moves[index];
       State.actionToken = 0;
     }
-    console.log("Bot Choose: ",State.moveSelected);
   } catch (error) {
     console.log(error);
   }
@@ -182,8 +177,6 @@ const botDamageCalculation = async (botMove, playerCurrentPokemon, botCurrentPok
     }
 
     tBotDamageCount = Number.parseInt(tBotDamageCount, 10);
-    console.log("remaining HP player: ", playerCurrentPokemon.rHP);
-    console.log("Damage HP player: ", tBotDamageCount);
     if (playerCurrentPokemon.rHP <= tBotDamageCount){
       State.playerPokemon.rHP = 0;
     } else {
@@ -205,12 +198,10 @@ export const BotAction = async (botDecisionState, botCurrentPokemon, playerCurre
   }
 
   if (botCurrentPokemon.rHP !== 0){
-    console.log("bot is here right now and action token is: ", botDecisionState.actionToken);
     if (botDecisionState.actionToken === 1){ // Bot Switch
-      console.log("botSwitch in is:", botDecisionState.SwitchInPokemon);
       State.botUpdate = await botSwitchAction(botDecisionState.SwitchInPokemon, botCurrentPokemon);
-      console.log("State.botUpdate: ", State.botUpdate);
     } else if (botDecisionState.actionToken === 0){ // Giving Damage
+      console.log("Player Pokemon (in bot method):", playerCurrentPokemon);
       const DamageResult = await botDamageCalculation(botDecisionState.SelectedMove, playerCurrentPokemon, botCurrentPokemon);
       State.playerUpdate = DamageResult.playerPokemon;
     }
