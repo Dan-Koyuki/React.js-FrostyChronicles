@@ -77,6 +77,7 @@ export const DamageCalculation = async (playerMove, botCurrentPokemon, playerCur
       tBotDamageCount *= 0;
     }
 
+    tBotDamageCount = Number.parseInt(tBotDamageCount, 10);
     if (botCurrentPokemon.rHP <= tBotDamageCount){
       State.botUpdate.rHP = 0
     } else {

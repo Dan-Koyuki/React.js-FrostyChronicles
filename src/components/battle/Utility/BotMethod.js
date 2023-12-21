@@ -69,38 +69,6 @@ export const botSwitchAction = async (switchInPokemon, updatedPokemon) =>{
   }
 }
 
-export const botDecision = async (botCurrentPokemon, playerCurrentPokemon, botTeam) => {
-  const State = {
-    actionToken: 0,
-    SwitchInPokemon: {},
-    SelectedMove: {}
-  }
-  try {
-    let advantagePoint = 0;
-    playerCurrentPokemon.types.forEach((type) => {
-      botCurrentPokemon.types.forEach((botType) => {
-        if (botType.effect.double.includes(type.TypeID) || botType.effect.neutral.includes(type.TypeID)){
-          advantagePoint += 1;
-        }
-      })
-    })
-    if (advantagePoint > 0){
-      const MoveState = await botMove(botCurrentPokemon, playerCurrentPokemon);
-      State.actionToken = MoveState.actionToken;
-      State.SelectedMove = MoveState.moveSelected;
-    } else if (advantagePoint === 0){
-      const SwitchState = await botSwitch(playerCurrentPokemon, botTeam);
-      State.actionToken = SwitchState.actionToken;
-      State.SwitchInPokemon = SwitchState.botSwitchIn;
-    }
-  } catch (error) {
-    console.log(error);
-  }
-
-  return State;
-
-}
-
 const botMove = async (botCurrentPokemon, playerCurrentPokemon) => {
   const State = {
     moveSelected: null,
@@ -190,6 +158,38 @@ const botDamageCalculation = async (botMove, playerCurrentPokemon, botCurrentPok
 
 }
 
+export const botDecision = async (botCurrentPokemon, playerCurrentPokemon, botTeam) => {
+  const State = {
+    actionToken: 0,
+    SwitchInPokemon: {},
+    SelectedMove: {}
+  }
+  try {
+    let advantagePoint = 0;
+    playerCurrentPokemon.types.forEach((type) => {
+      botCurrentPokemon.types.forEach((botType) => {
+        if (botType.effect.double.includes(type.TypeID) || botType.effect.neutral.includes(type.TypeID)){
+          advantagePoint += 1;
+        }
+      })
+    })
+    if (advantagePoint > 0){
+      const MoveState = await botMove(botCurrentPokemon, playerCurrentPokemon);
+      State.actionToken = MoveState.actionToken;
+      State.SelectedMove = MoveState.moveSelected;
+    } else if (advantagePoint === 0){
+      const SwitchState = await botSwitch(playerCurrentPokemon, botTeam);
+      State.actionToken = SwitchState.actionToken;
+      State.SwitchInPokemon = SwitchState.botSwitchIn;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+
+  return State;
+
+}
+
 export const BotAction = async (botDecisionState, botCurrentPokemon, playerCurrentPokemon, botTeam) => {
   const State ={
     botWin: true,
@@ -206,21 +206,30 @@ export const BotAction = async (botDecisionState, botCurrentPokemon, playerCurre
       State.playerUpdate = DamageResult.playerPokemon;
     }
   } else {
-    let FaintCounter = 0
-    botTeam.forEach((pokemon) => {
-      if (pokemon.rHP === 0){
-        FaintCounter += 1
-      }
-    })
-
-    if (FaintCounter !== botTeam.length){
-      const unFaintedTeam = botTeam.filter(pokemon => pokemon.rHP !== 0);
-      const FaintedState = await botSwitch(playerCurrentPokemon, unFaintedTeam);
-      await botSwitchAction(FaintedState.botSwitchIn, botCurrentPokemon);
-    } else {
-      State.botWin = false;
-    }
+    const FaintedState = await handleFaintedPokemon(botCurrentPokemon, botTeam, playerCurrentPokemon);
+    State.botUpdate = FaintedState.botUpdate;
+    State.botWin = FaintedState.botWin;
   }
   return State;
 }
+
+export const handleFaintedPokemon = async (botCurrentPokemon, botTeam, playerCurrentPokemon) => {
+  const state = {
+    botUpdate: botCurrentPokemon,
+    playerUpdate: playerCurrentPokemon,
+    botWin: true,
+  };
+
+  const faintedCounter = botTeam.filter((pokemon) => pokemon.rHP === 0).length;
+
+  if (faintedCounter !== botTeam.length) {
+    const unFaintedTeam = botTeam.filter((pokemon) => pokemon.rHP !== 0);
+    const switchState = await botSwitch(playerCurrentPokemon, unFaintedTeam);
+    state.botUpdate = await botSwitchAction(switchState.botSwitchIn, botCurrentPokemon);
+  } else {
+    state.botWin = false;
+  }
+
+  return state;
+};
 
