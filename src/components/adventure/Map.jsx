@@ -1,8 +1,24 @@
 import React, { useEffect, useRef } from 'react';
 import Overworld from './utils/Overworld';
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+
+
+const GlobalStyle = createGlobalStyle`
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    background: grey;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+  }
+`;
 
 const Map = () => {
+  const navigate = useNavigate();
   const canvasRef = useRef(null); // Create a reference to the canvas element
 
   // const { user } = useUserAuth();
@@ -14,13 +30,20 @@ const Map = () => {
     overworld.init();
   }, []); // Run this effect only once, similar to componentDidMount
 
+  const handleBack = () => {
+    navigate("/home");
+  };
+
   return (
+    <>
+    <GlobalStyle />
     <Container>
-      <BackButton>Back</BackButton>
+      <BackButton onClick={handleBack}>Back</BackButton>
       <GameContainer>
         <GameCanvas ref={canvasRef}></GameCanvas>
       </GameContainer>
     </Container>
+    </>
   );
 }
 
@@ -46,7 +69,7 @@ const GameContainer = styled.div`
   margin: 0 auto;
   outline: 2px solid #fff;
 
-  transform: scale(2.7) translateY(33%);
+  transform: scale(2.5) translateY(35%);
 `
 
 const GameCanvas = styled.canvas`

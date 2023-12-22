@@ -1,3 +1,5 @@
+import DirectionInput from "./DirectionInput";
+import OverworldMap, { OverworldMaps } from "./OverworldMap";
 
 class Overworld{
   constructor(config) {
@@ -6,13 +8,48 @@ class Overworld{
     this.map = null
   }
 
+  startGameLoop() {
+    const step = () => {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+      const cameraPerson = this.map.gameObjects.hero;
+     
+      //Update all objects
+      Object.values(this.map.gameObjects).forEach(object => {
+        object.update({
+          arrow: this.directionInput.direction,
+          map: this.map,
+        })
+      })
+
+      //Draw Lower layer
+      this.map.drawLowerImage(this.ctx, cameraPerson);
+
+      //Draw Game Objects
+      Object.values(this.map.gameObjects).sort((a,b) => {
+        return a.y - b.y;
+      }).forEach(object => {
+        object.sprite.draw(this.ctx, cameraPerson);
+      })
+
+      //Draw Upper layer
+      this.map.drawUpperImage(this.ctx, cameraPerson);
+      
+      requestAnimationFrame(() => {
+        step();   
+      })
+    }
+    step();
+  }
+
   init () {
-    const image  = new Image();
-    image.onload = () => {
-      console.log("its here");
-      this.ctx.drawImage(image, 0, 0);
-    };
-    image.src = 'https://raw.githubusercontent.com/DanKoyuki/sprite/master/images/maps/maplower.png';
+    this.map = new OverworldMap(OverworldMaps.PokemonCenter);
+    this.map.mountObjects();
+
+    this.directionInput = new DirectionInput();
+    this.directionInput.init();
+
+    this.startGameLoop();
   }
 
 }

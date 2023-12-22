@@ -16,6 +16,7 @@ import {
   botDecision,
   botSwitch,
   botSwitchAction,
+  handleFaintedPokemon,
 } from "./Utility/BotMethod";
 
 const Stage = () => {
@@ -67,14 +68,6 @@ const Stage = () => {
       setbotBattleTeam(opponent.vBotBattleTeam);
     }
   }, []);
-
-  useEffect(() => {
-    if (actionComplete) {
-      checkEndGame();
-      setStartAction(false);
-      setActionComplate(false);
-    }
-  }, [actionComplete]);
 
   const checkEndGame = () => {
     if (!playerWin) {
@@ -175,6 +168,10 @@ const Stage = () => {
 
           // PLAYER ACTION
           await handlePlayerAction(selectedMove);
+          if (botCurrent.rHP === 0){
+            const botFaint = await handleFaintedPokemon(botCurrent, botBattleTeam, playerCurrent);
+            setBotCurrent(botFaint.botUpdate);
+          }
         } else {
           const chance = Math.random() < 0.5;
           if (chance) {
@@ -205,6 +202,10 @@ const Stage = () => {
 
             // PLAYER ACTION
             await handlePlayerAction(selectedMove);
+            if (botCurrent.rHP === 0){
+              const botFaint = await handleFaintedPokemon(botCurrent, botBattleTeam, playerCurrent);
+              setBotCurrent(botFaint.botUpdate);
+            }
           }
         }
       } else if (botDecisionState.actionToken === 1) {
@@ -289,6 +290,14 @@ const Stage = () => {
   const handleBack = () => {
     navigate("/home");
   };
+
+  useEffect(() => {
+    if (actionComplete) {
+      checkEndGame();
+      setStartAction(false);
+      setActionComplate(false);
+    }
+  }, [actionComplete]);
 
   return (
     <GContainer>
