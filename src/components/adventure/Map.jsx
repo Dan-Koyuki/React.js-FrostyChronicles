@@ -39,6 +39,7 @@ const Map = () => {
     <GlobalStyle />
     <Container>
       <BackButton onClick={handleBack}>Back</BackButton>
+      <BackButton onClick={() => {navigate("https://dan-koyuki.github.io/Web-Vanilla_FrostyTest/")}}>v2</BackButton>
       <GameContainer>
         <GameCanvas ref={canvasRef}></GameCanvas>
       </GameContainer>
