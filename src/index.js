@@ -6,7 +6,7 @@ import pokedexReducer, { movesFetchS, pokemonsFetch, staticTeamFetch, typesFetch
 import { Provider } from 'react-redux';
 import authReducer, { loadUser } from './features/authSlice';
 import teamReducer from './features/teamSlice';
-import memberReducer, { getTotals } from './features/memberSlice';
+import memberReducer from './features/memberSlice';
 import battleSlice from './features/battleSlice'
 
 const store = configureStore({
@@ -24,7 +24,6 @@ store.dispatch(movesFetchS());
 store.dispatch(typesFetch());
 store.dispatch(staticTeamFetch());
 store.dispatch(loadUser());
-store.dispatch(getTotals());
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

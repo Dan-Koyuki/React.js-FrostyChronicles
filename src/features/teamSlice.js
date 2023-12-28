@@ -1,26 +1,23 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import axios from 'axios';
-import { uri } from './api';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+import { uri } from "./api";
 
 const initialState = {
-  _id: '',
-  name: '',
-  userID: '',
-  creationStatus: '',
-  creationError: '',
-  teams:  localStorage.getItem("team") ?  JSON.parse(localStorage.getItem("team")) : [],
-  fetchingStatus: '',
-  fetchingError:''
+  _id: "",
+  name: "",
+  userID: "",
+  creationStatus: "",
+  creationError: "",
+  teams: [],
+  fetchingStatus: "",
+  fetchingError: "",
 };
 
 export const createTeam = createAsyncThunk(
-  'utils/createTeam',
-  async (values, {rejectWithValue}) => {
+  "utils/createTeam",
+  async (values, { rejectWithValue }) => {
     try {
-      const team = await axios.post(`${uri}/api/createteam`, {
-        name: values.name,
-        userID: values.userID
-      });
+      const team = await axios.post(`${uri}/api/teams/create`, values);
 
       return team.data;
     } catch (error) {
@@ -31,11 +28,13 @@ export const createTeam = createAsyncThunk(
 );
 
 export const fetchTeam = createAsyncThunk(
-  'utils/fetchTeam',
-  async(values, {rejectWithValue}) => {
+  "utils/fetchTeam",
+  async (values, { rejectWithValue }) => {
     try {
-      const team = await axios.post(`${uri}/api/fetchteam`, {
-        userID: values.userID
+      const team = await axios.get(`${uri}/api/teams/get`, {
+        params: {
+          userID: values.userID,
+        },
       });
       return team.data;
     } catch (error) {
@@ -46,47 +45,33 @@ export const fetchTeam = createAsyncThunk(
 );
 
 const teamSlice = createSlice({
-  name: 'utils',
+  name: "utils",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(createTeam.pending, (state, action) => {
-      return {...state, creationStatus: "pending"};
+      state.creationStatus = 'pending';
     });
     builder.addCase(createTeam.fulfilled, (state, action) => {
-      if (action.payload){
-        const teamsFromLocalStorage = localStorage.getItem('team');
-        const teams = teamsFromLocalStorage ? JSON.parse(teamsFromLocalStorage) : [];
-        teams.push(action.payload);
-        localStorage.setItem('team', JSON.stringify(teams));
-        return {
-          _id: action.payload._id,
-          name: action.payload.name,
-          userID: action.payload.userID
-        }
-      } else return state;
+      state.teams.push(action.payload);
+      state.creationStatus = 'success';
     });
     builder.addCase(createTeam.rejected, (state, action) => {
-      return { ...state, creationStatus: "rejected", creationError: action.payload };
+      state.creationStatus= "rejected";
+      state.creationError= action.payload;
     });
     builder.addCase(fetchTeam.pending, (state, action) => {
-      return {...state, fetchingStatus: "pending"};
+      state.fetchingStatus = 'pending';
     });
     builder.addCase(fetchTeam.fulfilled, (state, action) => {
-      console.log(action.payload);
-      if (action.payload){
-        localStorage.setItem('team', JSON.stringify(action.payload));
-        return {
-          ...state,
-          fetchingStatus: 'success',
-          teams: action.payload
-        }
-      } else return state;
+      state.teams = action.payload;
+      state.fetchingStatus = 'success';
     });
     builder.addCase(fetchTeam.rejected, (state, action) => {
-      return { ...state, fetchingStatus: "rejected", fetchingError: action.payload };
+      state.fetchingStatus = 'rejected';
+      state.fetchingError = action.payload;
     });
-  }
+  },
 });
 
 export default teamSlice.reducer;

@@ -3,12 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setBattlers } from '../features/battleSlice';
 import styled from 'styled-components';
+import { fetchTeam } from '../features/teamSlice';
 
 const Home = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const { staticTeam } = useSelector((state) => state.pokemons);
+  const { teams } = useSelector((state) => state.team);
 
   const [botSelected, setBotSelected] = useState('');
   const [userSelected, setUserSelected] = useState('');
@@ -24,7 +26,13 @@ const Home = () => {
     }
   }, [userSelected]);
 
-  console.log("preview team: ", prevTeam);
+  useEffect(() => {
+    dispatch(fetchTeam({userID: auth._id}));
+  }, [])
+
+  useEffect(() => {
+    console.log(teams); // Log the teams here to see the updated state
+  }, [teams]);
 
   const handleAdventure = () => {
     navigate('/adventure');
@@ -38,8 +46,6 @@ const Home = () => {
       navigate('/battle');
     }
   }
-  
-  // const { teams } = useSelector((state) => state.team); // get Teams Collection
 
   return (
     <div className='homepage-container'>
@@ -54,8 +60,11 @@ const Home = () => {
               {staticTeam && staticTeam?.map((team) => (
                 <option key={team.TeamID} value={team.TeamID}>{team.TeamID}</option>
               ))}
+              {teams?.map((team) => (
+                <option key={team.name} value={team.name}>{team.name}</option>
+              ))}
             </select>
-            <p>Currently, team created from Team menu cant be used</p>
+            <p>Currently, team created from Team menu cant be used. Please dont select it.</p>
           </div>
           <TeamPreview>
             {prevTeam?.Member.map((pokemon, index) => (
