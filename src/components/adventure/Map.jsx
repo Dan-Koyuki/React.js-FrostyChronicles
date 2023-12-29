@@ -34,12 +34,16 @@ const Map = () => {
     navigate("/home");
   };
 
+  const handleNavigate = () => {
+    window.location.href = "https://dan-koyuki.github.io/Web-Vanilla_FrostyTest/"
+  }
+
   return (
     <>
     <GlobalStyle />
     <Container>
       <BackButton onClick={handleBack}>Back</BackButton>
-      <BackButton onClick={() => {navigate("https://dan-koyuki.github.io/Web-Vanilla_FrostyTest/")}}>v2</BackButton>
+      <BackButton onClick={handleNavigate}>vanilla version</BackButton>
       <GameContainer>
         <GameCanvas ref={canvasRef}></GameCanvas>
       </GameContainer>
