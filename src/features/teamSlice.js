@@ -17,6 +17,7 @@ export const createTeam = createAsyncThunk(
   "utils/createTeam",
   async (values, { rejectWithValue }) => {
     try {
+      console.log("req:", values);
       const team = await axios.post(`${uri}/api/teams/create`, values);
 
       return team.data;

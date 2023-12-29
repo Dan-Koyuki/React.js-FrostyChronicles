@@ -61,7 +61,7 @@ const Home = () => {
                 <option key={team.TeamID} value={team.TeamID}>{team.TeamID}</option>
               ))}
               {teams?.map((team) => (
-                <option key={team.name} value={team.name}>{team.name}</option>
+                <option key={team._id} value={team._id}>{team.name}</option>
               ))}
             </select>
             <p>Currently, team created from Team menu cant be used. Please dont select it.</p>
